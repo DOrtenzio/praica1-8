@@ -91,14 +91,18 @@ class Operazioni{
                         }
                         break;
     
-                    case 'UPDATE':
-                        $sql = "UPDATE `$table` SET ";
-                        $set_part = [];
-                        foreach ($op['data'] as $k => $v) {
-                            $set_part[] = "`$k`=:u_{$index}_$k";
-                            $valori[":u_{$index}_$k"] = $v;
-                        }
-                        $sql .= implode(", ", $set_part);
+                        case 'UPDATE':
+                            $sql = "UPDATE `$table` SET ";
+                            $set_part = [];
+                            foreach ($op['data'] as $k => $v) {
+                                if (is_string($v) && strpos($v, $k) !== false) {
+                                    $set_part[] = "`$k`=$v";
+                                } else {
+                                    $set_part[] = "`$k`=:u_{$index}_$k";
+                                    $valori[":u_{$index}_$k"] = $v;
+                                }
+                            }
+                            $sql .= implode(", ", $set_part);
     
                         if (!empty($op['where'])) {
                             $sql .= " WHERE ";

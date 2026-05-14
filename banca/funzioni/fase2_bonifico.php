@@ -1,5 +1,6 @@
 <?php
 require_once("operazioni.php");
+if(!(isset($_POST["id_correntista_d"]) && !empty($_POST["id_correntista_d"]) && isset($_POST["id_correntista_m"]) && !empty($_POST["id_correntista_m"]))) header("location:../errorpage.html");
 ?>
 <!DOCTYPE html>
 <html lang="it">
@@ -24,31 +25,34 @@ require_once("operazioni.php");
 
     <div class="container">
         <a href="../index.php" class="back-link">&larr; Torna alla lista</a>
-        <h1>Effettua un Bonifico</h1>
+        <h1>Fase 2 Bonifico</h1>
 
         <form action="fase2_bonifico.php" method="post">
             <div class="form-group">
-                <label for="id_correntista_m">Correntista Mittente</label>
-                <select id="id_correntista_m" name="id_correntista_m" required>
+                <label for="id_cm">Conto Correntista Mittente</label>
+                <select id="id_cm" name="id_cm" required>
                     <?php
                         $obj = new Operazioni();
-                        foreach($obj->query("correntisti") as $cc) {
-                            echo "<option value='".$cc["id_correntista"]."'>".$cc["codice_fiscale"]."</option>";
+                        foreach($obj->query("conticorrenti",["id_correntista"=>$_POST["id_correntista_m"]]) as $cc) {
+                            echo "<option value='".$cc["id_conto"]."'>".$cc["id_conto"]." / ".$cc["saldo"]."</option>";
                         }
                     ?>
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="id_correntista_d">Correntista Destinatario</label>
-                <select id="id_correntista_d" name="id_correntista_d" required>
+                <label for="id_cd">Conto Correntista Destinatario</label>
+                <select id="id_cd" name="id_cd" required>
                     <?php
-                        $obj = new Operazioni();
-                        foreach($obj->query("correntisti") as $cc) {
-                            echo "<option value='".$cc["id_correntista"]."'>".$cc["codice_fiscale"]."</option>";
+                        foreach($obj->query("conticorrenti",["id_correntista"=>$_POST["id_correntista_d"]]) as $cc) {
+                            echo "<option value='".$cc["id_conto"]."'>".$cc["id_conto"]." / ".$cc["saldo"]."</option>";
                         }
                     ?>
                 </select>
+            </div>
+            <div class="form-group">
+                <label for="q">Quantità</label>
+                <input type="number" name="q" placeholder="100.0" required min="0">
             </div>
             <button type="submit" name="Salva" class="btn-save">Effettua</button>
         </form>
