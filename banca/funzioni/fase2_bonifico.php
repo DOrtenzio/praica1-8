@@ -27,7 +27,7 @@ if(!(isset($_POST["id_correntista_d"]) && !empty($_POST["id_correntista_d"]) && 
         <a href="../index.php" class="back-link">&larr; Torna alla lista</a>
         <h1>Fase 2 Bonifico</h1>
 
-        <form action="fase2_bonifico.php" method="post">
+        <form action="salva_bonifico.php" method="post">
             <div class="form-group">
                 <label for="id_cm">Conto Correntista Mittente</label>
                 <select id="id_cm" name="id_cm" required>
