@@ -1,6 +1,7 @@
 <?php
 require_once("funzioni/operazioni.php");
 if(session_status()!==PHP_SESSION_ACTIVE) session_start();
+if(!isset($_SESSION["filtro"])) $_SESSION["filtro"]=-1;
 ?>
 <!DOCTYPE html>
 <html lang="it">
@@ -41,13 +42,13 @@ if(session_status()!==PHP_SESSION_ACTIVE) session_start();
 
                     try {
                         $obj = new Operazioni();
-                        foreach($obj->query("corretisti") as $cc) {
+                        foreach($obj->query("correntisti") as $cc) {
                             $val="";
                             if($_SESSION["filtro"]==$cc["id_correntista"]) $val="selected";
                             echo "<option value='".$cc["id_correntista"]."'".$val.">".$cc["codice_fiscale"]."</option>";
                         }
                     } catch(Exception $e) {
-                        echo "<option value=''>Errore nel caricamento dati.</option>";
+                        echo "<option value='-1'>Errore nel caricamento dati.</option>";
                     }
                 ?>
             </select>
@@ -68,7 +69,7 @@ if(session_status()!==PHP_SESSION_ACTIVE) session_start();
             try {
                 $obj = new Operazioni();
 
-                if($_SESSION["filtro"]===-1) echo "<tr><td colspan='5' style='color:red;'>Seleziona Un correntista</td></tr>";
+                if($_SESSION["filtro"]==-1) echo "<tr><td colspan='5' style='color:red;'>Seleziona Un correntista</td></tr>";
                 else{
                     $correntista = $obj->query("correntisti",["id_correntista"=>$_SESSION["filtro"]])[0];
                     $saldo=0;
